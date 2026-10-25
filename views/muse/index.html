@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Muse Desktop</title>
+    <script>
+      // Diagnostics: record every uncaught error to the plugin log, and keep it
+      // for the fallback report below. A blank panel then explains itself.
+      (function () {
+        window.__museFailures = []
+        function diag(kind, text) {
+          var value = String(text).slice(0, 1200)
+          window.__museFailures.push(kind + ': ' + value)
+          try {
+            var bridge = window.pluginBridge
+            if (bridge && typeof bridge.invoke === 'function') {
+              bridge.invoke('muse.__diag', { args: [kind, value] })
+            }
+          } catch (error) {
+            /* the probe must never throw */
+          }
+        }
+        window.__museDiag = diag
+        window.addEventListener('error', function (event) {
+          diag(
+            'window.onerror',
+            (event.message || 'error') +
+              ' @ ' +
+              String(event.filename || '?').split('/').pop() +
+              ':' +
+              event.lineno +
+              ':' +
+              event.colno,
+          )
+          if (event.error && event.error.stack) diag('error.stack', event.error.stack)
+        })
+        window.addEventListener('unhandledrejection', function (event) {
+          var reason = event.reason
+          diag('unhandledrejection', String((reason && (reason.stack || reason.message)) || reason))
+        })
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- Scripts run after #root exists: createRoot() throws React #299 otherwise. -->
+    <script src="./shim.js"></script>
+    <script src="./assets/muse-bundle.js"></script>
+    <script>
+      // If React still fails to paint, say why instead of leaving a blank window.
+      setTimeout(function () {
+        var root = document.getElementById('root')
+        var len = root ? root.innerHTML.length : -1
+        var bridgeOk = window.pluginBridge && typeof window.pluginBridge.invoke === 'function'
+        if (window.__museDiag) {
+          window.__museDiag(
+            'render',
+            'root-len=' +
+              len +
+              ' muse=' +
+              typeof window.muse +
+              ' bridge=' +
+              (bridgeOk ? 'ok' : 'missing') +
+              ' h=' +
+              window.innerHeight +
+              ' w=' +
+              window.innerWidth,
+          )
+        }
+        if (len > 0 || !root) return
+        var lines = window.__museFailures || []
+        root.setAttribute(
+          'style',
+          'font:13px/1.6 ui-monospace, Consolas, monospace;color:#22303f;background:#f7f8fa;padding:24px;white-space:pre-wrap;height:100%;box-sizing:border-box;overflow:auto',
+        )
+        root.textContent =
+          'Muse Desktop could not draw its interface.\n\n' +
+          'bridge: ' +
+          (bridgeOk ? 'ok' : 'missing') +
+          '   window.muse: ' +
+          typeof window.muse +
+          '   viewport: ' +
+          window.innerWidth +
+          'x' +
+          window.innerHeight +
+          '\n\n' +
+          (lines.length ? lines.join('\n') : 'No JavaScript error was reported.') +
+          '\n\nThis report is also written to the plugin log (search for [muse][panel]).'
+      }, 1600)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Muse Desktop</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #0b2450;
+        color: #dbe6f7;
+        font: 13px/1.5 -apple-system, "Segoe UI", system-ui, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      p {
+        opacity: 0.75;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Opening Muse Desktop…</p>
+    <script>
+      // This window exists only because the side rail lists plugins that declare
+      // ui.panel. Opening it immediately docks Muse into the work panel instead,
+      // and falls back to rendering here if the host cannot reveal a view.
+      ;(async function () {
+        try {
+          var reply = await window.pluginBridge.invoke('muse.launch', { args: [] })
+          if (reply && reply.docked === true) {
+            try {
+              await window.pluginBridge.invoke('muse.close-self', { args: [] })
+            } catch (error) {
+              /* the host closes it for us */
+            }
+            return
+          }
+        } catch (error) {
+          /* fall through to the in-window fallback */
+        }
+        location.replace('./muse/index.html')
+      })()
+    </script>
+  </body>
+</html>
