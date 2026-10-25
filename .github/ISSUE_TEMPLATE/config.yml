@@ -1,8 +1,0 @@
-blank_issues_enabled: true
-contact_links:
-  - name: Security vulnerability (private)
-    url: https://github.com/robzilla1738/muse-desktop/security/advisories/new
-    about: Report security issues privately to Robert Courson.
-  - name: Official Muse Code documentation
-    url: https://dev.meta.ai/docs/muse-code
-    about: This repository is an unofficial companion. For the CLI itself, use the official documentation.

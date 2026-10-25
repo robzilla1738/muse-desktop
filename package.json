@@ -1,41 +1,13 @@
 {
-  "name": "muse-desktop",
+  "name": "muse-desktop-pi-plugin",
+  "version": "0.3.10",
   "private": true,
-  "version": "0.2.0",
-  "description": "Unofficial macOS, Windows, and Linux desktop companion for Muse Code. Not affiliated with Meta.",
-  "author": {
-    "name": "Robert Courson",
-    "url": "https://github.com/robzilla1738"
-  },
+  "type": "commonjs",
   "license": "MIT",
-  "type": "module",
-  "main": "out/main/index.js",
   "scripts": {
-    "dev": "electron-vite dev",
-    "build": "npm run typecheck && electron-vite build",
-    "preview": "electron-vite preview",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "test:integration": "tsx scripts/verify-muse.ts",
-    "test:e2e": "playwright test",
-    "package": "npm run build && electron-builder --mac --dir",
-    "package:win": "npm run build && electron-builder --win --dir",
-    "package:linux": "npm run build && electron-builder --linux --dir",
-    "dist": "npm run build && electron-builder --mac",
-    "dist:win": "npm run build && electron-builder --win",
-    "dist:linux": "npm run build && electron-builder --linux",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "package:unsigned": "npm run build && electron-builder --mac --dir -c.mac.identity=null -c.mac.notarize=false",
-    "dist:unsigned": "npm run build && electron-builder --mac dmg -c.mac.identity=null -c.mac.notarize=false",
-    "prepare:sparkle": "node scripts/prepare-sparkle.mjs",
-    "release:appcast": "node scripts/generate-appcasts.mjs"
-  },
-  "engines": {
-    "node": ">=22.12.0"
+    "build": "vite build --config embed.config.mjs"
   },
   "dependencies": {
-    "@muse-code/sdk": "1.4.7",
     "lucide-react": "1.55.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
@@ -44,32 +16,7 @@
     "zod": "4.6.7"
   },
   "devDependencies": {
-    "@electron/notarize": "2.5.0",
-    "@playwright/test": "1.64.0",
-    "@types/node": "26.6.5",
-    "@types/react": "19.3.0",
-    "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "5.2.0",
-    "electron": "44.7.0",
-    "electron-builder": "26.15.3",
-    "electron-vite": "5.0.0",
-    "node-api-headers": "1.9.0",
-    "prettier": "3.9.10",
-    "sharp": "0.35.5",
-    "tsx": "4.23.15",
-    "typescript": "7.0.2",
-    "vite": "7.3.7",
-    "vitest": "5.0.4"
-  },
-  "overrides": {
-    "global-agent": "4.1.3"
-  },
-  "homepage": "https://github.com/robzilla1738/muse-desktop#readme",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/robzilla1738/muse-desktop.git"
-  },
-  "bugs": {
-    "url": "https://github.com/robzilla1738/muse-desktop/issues"
+    "vite": "7.3.7"
   }
 }

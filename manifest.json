@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "id": "local.muse-desktop",
+  "name": "Muse Desktop",
+  "version": "0.3.10",
+  "description": "Unofficial learning adaptation of Muse Desktop for PI-Desktop, using host-configured models and replacement unicorn artwork.",
+  "i18n": {
+    "en": {
+      "name": "Muse Desktop",
+      "description": "Unofficial learning adaptation of Muse Desktop for PI-Desktop, using host-configured models and replacement unicorn artwork.",
+      "safetyNotes": "Conversation text and the project folder path are sent to the model provider configured in PI-Desktop whenever you send a message (agent.complete). The plugin keeps its conversations and preferences in its own data directory. It can list a project folder, read files inside it for the preview pane, run read-only git status/diff, reveal a folder and open a terminal there, and open http(s) links in your browser. It cannot write files, run tools, or read credentials. Attachments and microphone input are unavailable and say so."
+    },
+    "zh-CN": {
+      "name": "Muse Desktop",
+      "description": "基于 Muse Desktop 的非官方学习迁移版：适配 PI-Desktop 插件体系，使用宿主模型和替换后的独角兽素材。",
+      "safetyNotes": "发送消息时，对话内容与项目文件夹路径会经 agent.complete 送到你在 PI-Desktop 中配置的模型服务商。插件把会话与偏好存在自己的数据目录。它可以列出项目文件夹、读取其中的文件用于预览、执行只读的 git status/diff、在资源管理器中定位文件夹、在项目里打开终端，以及用浏览器打开 http(s) 链接。它不写入文件、不运行工具、不读取凭据。附件与麦克风不可用，并会明确说明。"
+    }
+  },
+  "icon": "icon.svg",
+  "author": "PI-Desktop integration of Muse Desktop (original UI by Robert Courson, MIT)",
+  "license": "MIT",
+  "homepage": "https://github.com/vsd269/muse-desktop/tree/pi-desktop-plugin",
+  "repository": "https://github.com/vsd269/muse-desktop",
+  "changelog": "0.3.10: Center maximize SVG; use custom unicorn avatar launcher; align dynamic first-free launcher slots to native sidebar columns.",
+  "safetyNotes": "Conversation text and the project folder path are sent to the model provider configured in PI-Desktop whenever you send a message (agent.complete). The plugin keeps its conversations and preferences in its own data directory. It can list a project folder, read files inside it for the preview pane, run read-only git status/diff, reveal a folder and open a terminal there, and open http(s) links in your browser. It cannot write files, run tools, or read credentials.",
+  "main": "main.js",
+  "categories": [
+    "productivity"
+  ],
+  "permissions": [
+    "ui.panel",
+    "ui.view",
+    "models.list",
+    "agent.complete",
+    "fs.read",
+    "shell.openExternal",
+    "renderer.extension"
+  ],
+  "engines": {
+    "piDesktop": ">=0.21.0"
+  },
+  "activationEvents": [
+    "onStartup",
+    "onCommand:muse-desktop.open"
+  ],
+  "ui": {
+    "panel": "views/launch.html",
+    "title": {
+      "en": "Muse Desktop",
+      "zh-CN": "Muse Desktop"
+    },
+    "width": 380,
+    "height": 200
+  },
+  "contributes": {
+    "commands": [
+      {
+        "id": "muse-desktop.open",
+        "title": "Muse Desktop: Open / 打开 Muse Desktop",
+        "keywords": [
+          "muse",
+          "desktop",
+          "chat",
+          "conversation",
+          "对话",
+          "聊天"
+        ],
+        "category": "Productivity"
+      }
+    ],
+    "views": [
+      {
+        "id": "muse-desktop",
+        "title": {
+          "en": "Muse Desktop",
+          "zh-CN": "Muse Desktop"
+        },
+        "icon": "chat",
+        "entry": "views/muse/index.html",
+        "order": 35
+      }
+    ],
+    "settings": [
+      {
+        "key": "modelKey",
+        "title": "Default model (providerId/modelId). Leave empty to use PI-Desktop's default model.",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "key": "language",
+        "title": "Language: auto (follow Pi-Desktop) / zh / en",
+        "type": "string",
+        "default": "auto"
+      }
+    ]
+  },
+  "renderer": "renderer/entry.mjs",
+  "rendererActions": [
+    "plugin.call"
+  ],
+  "rendererCallMethods": [
+    "bridge.invoke",
+    "layer.request",
+    "layer.show",
+    "layer.close"
+  ]
+}

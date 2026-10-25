@@ -1,9 +1,0 @@
-node_modules
-out
-release
-dist
-test-results
-playwright-report
-package-lock.json
-.cache
-updates/*.xml
